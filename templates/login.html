@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Login · Secure Notes{% endblock %}
+
+{% block content %}
+<section class="auth-card">
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Log in to access your secure notes.</p>
+
+    <form method="post" class="form">
+        <div class="form-group">
+            <label for="username">Username</label>
+            <input
+                id="username"
+                name="username"
+                type="text"
+                required
+                autocomplete="username"
+                placeholder="Enter your username">
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password</label>
+            <input
+                id="password"
+                name="password"
+                type="password"
+                required
+                autocomplete="current-password"
+                placeholder="Enter your password">
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-full">Log in</button>
+    </form>
+
+    <p class="auth-alt">
+        New here?
+        <a href="{{ url_for('register') }}">Create an account</a>
+    </p>
+</section>
+{% endblock %}

@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · Secure Notes{% endblock %}
+
+{% block content %}
+<section class="dashboard-header">
+    <div>
+        <h1 class="page-title">Hi, {{ user.username }}</h1>
+        <p class="page-subtitle">
+            Your personal, encrypted-like secure notes space.
+        </p>
+    </div>
+    <form method="get" action="{{ url_for('dashboard') }}" class="search-form">
+        <input
+            type="text"
+            name="q"
+            value="{{ query or '' }}"
+            placeholder="Search notes by title or content...">
+        <button type="submit" class="btn btn-outline">Search</button>
+    </form>
+</section>
+
+<section class="dashboard-grid">
+    <div class="card card-new-note">
+        <h2>Create a new note</h2>
+        <form method="post" class="form">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input
+                    id="title"
+                    name="title"
+                    type="text"
+                    required
+                    maxlength="120"
+                    placeholder="Note title">
+            </div>
+
+            <div class="form-group">
+                <label for="content">Content</label>
+                <textarea
+                    id="content"
+                    name="content"
+                    rows="5"
+                    required
+                    placeholder="Write your note here..."></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-full">
+                Save note
+            </button>
+        </form>
+    </div>
+
+    <div class="card card-notes">
+        <div class="card-header">
+            <h2>Your notes</h2>
+            {% if query %}
+                <span class="badge">Filtered by "{{ query }}"</span>
+            {% endif %}
+        </div>
+
+        {% if notes %}
+            <ul class="notes-list">
+                {% for note in notes %}
+                    <li class="note-item">
+                        <div class="note-main">
+                            <h3 class="note-title">{{ note.title }}</h3>
+                            <p class="note-content">
+                                {{ note.content }}
+                            </p>
+                        </div>
+                        <div class="note-meta">
+                            <span class="note-timestamp">
+                                {{ note.created_at.replace('T', ' ') }}
+                            </span>
+                            <form
+                                method="post"
+                                action="{{ url_for('delete_note', note_id=note.id) }}"
+                                onsubmit="return confirm('Delete this note?');">
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    Delete
+                                </button>
+                            </form>
+                        </div>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="empty-state">
+                No notes yet{% if query %} for this search{% endif %}.
+                Start by creating a new note.
+            </p>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}
